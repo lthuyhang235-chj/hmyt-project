@@ -1,0 +1,53 @@
+﻿variable,description_vi,group,role,data_type,unit_or_coding,used_in_final_model,missing_handling,notes,missing_pct
+subject_id,Mã định danh bệnh nhân đã khử định danh trong MIMIC-IV,Định danh,Identifier,Integer,ID,Không,Không áp dụng,Không dùng làm predictor để tránh học theo định danh bệnh nhân.,0.00
+hadm_id,Mã định danh duy nhất của một lượt nhập viện,Định danh,Identifier,Integer,ID,Không,Không áp dụng,Mỗi hàng của dataset tương ứng với một lượt nhập viện.,0.00
+admittime,Thời điểm bệnh nhân nhập viện,Thông tin nhập viện,Timestamp,Datetime,YYYY-MM-DD HH:MM:SS,Không,Không áp dụng,Dùng để xây dựng cohort/đặc trưng theo thời gian; không đưa trực tiếp vào model cuối.,0.00
+dischtime,Thời điểm bệnh nhân xuất viện,Thông tin nhập viện,Timestamp,Datetime,YYYY-MM-DD HH:MM:SS,Không,Không áp dụng,T0 của bài toán dự báo là thời điểm xuất viện; không đưa trực tiếp vào model cuối.,0.00
+readmit_30d,Nhãn tái nhập viện trong vòng 30 ngày sau xuất viện,Outcome,Target,Binary,0 = không; 1 = có,Không,Không áp dụng,Biến mục tiêu của bài toán phân loại nhị phân.,0.00
+age,Tuổi bệnh nhân tại lượt nhập viện,Nhân khẩu học,Predictor,Integer,Năm,Có,Median nếu thiếu,Trong file hiện tại không có missing.,0.00
+gender,Giới tính hành chính của bệnh nhân,Nhân khẩu học,Predictor,Categorical,F / M,Có,Most frequent + One-Hot Encoding,Biến phân loại.,0.00
+los_days,Thời gian nằm viện của lượt nhập viện hiện tại,Thông tin nhập viện,Predictor,Numeric,Ngày,Có,Median + StandardScaler,Tính từ admittime đến dischtime.,0.00
+admission_type,Loại nhập viện,Thông tin nhập viện,Predictor,Categorical,"Ví dụ: EW EMER., URGENT, ELECTIVE, OBSERVATION ADMIT...",Có,Most frequent + One-Hot Encoding,Biến phân loại từ thông tin nhập viện.,0.00
+insurance,Loại bảo hiểm/nguồn thanh toán,Nhân khẩu học / hành chính,Predictor,Categorical,"Medicare, Medicaid, Private, Other, No charge",Có,Most frequent + One-Hot Encoding,Có missing nhẹ trong dataset.,0.28
+race,Nhóm race/ethnicity hành chính ghi nhận trong EHR,Nhân khẩu học,Predictor,Categorical,Các nhãn race/ethnicity của MIMIC-IV,Có,Most frequent + One-Hot Encoding,Cần diễn giải thận trọng; có các nhãn UNKNOWN/UNABLE TO OBTAIN/PATIENT DECLINED.,0.00
+marital_status,Tình trạng hôn nhân,Nhân khẩu học,Predictor,Categorical,"MARRIED, SINGLE, DIVORCED, WIDOWED",Có,Most frequent + One-Hot Encoding,Có missing nhẹ.,2.40
+admission_location,Nguồn/vị trí bệnh nhân đến trước khi nhập viện,Thông tin nhập viện,Predictor,Categorical,"Ví dụ: EMERGENCY ROOM, TRANSFER FROM HOSPITAL...",Có,Most frequent + One-Hot Encoding,Biến phân loại.,0.00
+discharge_location,Nơi đến sau khi xuất viện,Thông tin xuất viện,Predictor,Categorical,"Ví dụ: HOME, HOME HEALTH CARE, REHAB, SNF, HOSPICE...",Có,Most frequent + One-Hot Encoding,Có khoảng 7.61% missing.,7.61
+prior_admissions,Tổng số lượt nhập viện trước lượt hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Integer,Số lượt,Có,Median + StandardScaler,Một trong các đặc trưng quan trọng nhất theo SHAP.,0.00
+prior_hf_admissions,Số lượt nhập viện do/ liên quan suy tim trước lượt hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Integer,Số lượt,Có,Median + StandardScaler,Phản ánh tiền sử nhập viện vì suy tim.,0.00
+prior_admissions_30d,Số lượt nhập viện trong 30 ngày trước lượt hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Integer,Số lượt,Có,Median + StandardScaler,Đặc trưng lịch sử gần.,0.00
+prior_admissions_90d,Số lượt nhập viện trong 90 ngày trước lượt hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Integer,Số lượt,Có,Median + StandardScaler,Đặc trưng có SHAP cao.,0.00
+prior_admissions_1y,Số lượt nhập viện trong 1 năm trước lượt hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Integer,Số lượt,Có,Median + StandardScaler,Đặc trưng có SHAP cao nhất trong mô hình cuối.,0.00
+days_since_last_discharge,Số ngày từ lần xuất viện gần nhất đến lần nhập viện hiện tại,Tiền sử sử dụng dịch vụ,Predictor,Numeric,Ngày,Có,Constant 0 + StandardScaler; kết hợp has_prior_admission,Missing mang tính cấu trúc khi bệnh nhân không có lần nhập viện trước.,24.61
+n_diagnoses,Số chẩn đoán ghi nhận trong lượt nhập viện,Đặc điểm lâm sàng,Predictor,Integer,Số chẩn đoán,Có,Median + StandardScaler,Biến đếm.,0.00
+n_procedures,Số thủ thuật ghi nhận trong lượt nhập viện,Đặc điểm lâm sàng,Predictor,Integer,Số thủ thuật,Có,Median + StandardScaler,Biến đếm.,0.00
+n_unique_drugs,Số thuốc duy nhất ghi nhận trong lượt nhập viện,Thuốc,Predictor,Integer,Số thuốc,Có,Median + StandardScaler,Phản ánh mức độ sử dụng thuốc.,0.00
+creatinine_last,Giá trị creatinine gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,mg/dL,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,1.97
+bun_last,Giá trị blood urea nitrogen gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,mg/dL,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.02
+sodium_last,Nồng độ sodium gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,mEq/L,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.09
+potassium_last,Nồng độ potassium gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,mEq/L,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,1.94
+hemoglobin_last,Hemoglobin gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,g/dL,Có,Median + StandardScaler,Đặc trưng quan trọng trong SHAP.,2.87
+wbc_last,Số lượng bạch cầu gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,K/µL,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.93
+platelet_last,Số lượng tiểu cầu gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Integer,K/µL,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.72
+glucose_last,Glucose gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Integer,mg/dL,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.62
+bicarbonate_last,Bicarbonate gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Integer,mEq/L,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.42
+chloride_last,Chloride gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Integer,mEq/L,Có,Median + StandardScaler,Đơn vị nên đối chiếu itemid/source extraction khi công bố chính thức.,2.19
+calcium_last,Calcium toàn phần gần thời điểm xuất viện nhất,Xét nghiệm,Predictor,Numeric,mg/dL,Có,Median + StandardScaler,Missing khoảng 5.70%.,5.70
+cv_fold,Chỉ số fold dùng cho patient-level split/cross-validation,Kiểm soát phân chia dữ liệu,Split control,Integer,0–4,Không,Không áp dụng,"Fold 0 = Test, fold 1 = Validation, folds 2/3/4 = Train trong pipeline hiện tại.",0.00
+has_prior_admission,Chỉ báo bệnh nhân có ít nhất một lượt nhập viện trước hay không,Tiền sử sử dụng dịch vụ,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Hỗ trợ diễn giải missing cấu trúc của days_since_last_discharge.,0.00
+diabetes,Chỉ báo có bệnh đái tháo đường,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Biến bệnh đồng mắc.,0.00
+ckd,Chỉ báo có bệnh thận mạn,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,CKD = chronic kidney disease.,0.00
+copd,Chỉ báo có COPD,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,COPD = chronic obstructive pulmonary disease.,0.00
+atrial_fibrillation,Chỉ báo có rung nhĩ,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Bệnh đồng mắc tim mạch.,0.00
+cad,Chỉ báo có bệnh động mạch vành,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,CAD = coronary artery disease.,0.00
+anemia,Chỉ báo có thiếu máu,Bệnh đồng mắc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Biến bệnh đồng mắc.,0.00
+beta_blocker,Chỉ báo có sử dụng thuốc chẹn beta trong lượt nhập viện,Thuốc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Nhóm thuốc điều trị tim mạch.,0.00
+acei_arb_arni,Chỉ báo có sử dụng ACEI/ARB/ARNI,Thuốc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,"Gộp nhóm ACE inhibitor, ARB và ARNI.",0.00
+mra,Chỉ báo có sử dụng mineralocorticoid receptor antagonist,Thuốc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Ví dụ spironolactone/eplerenone tùy cách mapping thuốc của pipeline.,0.00
+loop_diuretic,Chỉ báo có sử dụng lợi tiểu quai,Thuốc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Nhóm thuốc lợi tiểu quai.,0.00
+sglt2_inhibitor,Chỉ báo có sử dụng thuốc ức chế SGLT2,Thuốc,Predictor,Binary,0 = không; 1 = có,Có,Không cần impute,Nhóm thuốc SGLT2 inhibitor.,0.00
+bmi_last,BMI gần thời điểm xuất viện nhất,OMR / đo lường lâm sàng,Excluded predictor,Numeric,kg/m²,Không,Loại khỏi model do missing cao,Missing 62.74% trong dataset; không dùng trong model cuối.,62.74
+dbp_last,Huyết áp tâm trương gần thời điểm xuất viện nhất,OMR / đo lường lâm sàng,Excluded predictor,Integer,mmHg,Không,Loại khỏi model do missing cao,Missing 92.91% trong dataset; không dùng trong model cuối.,92.91
+sbp_last,Huyết áp tâm thu gần thời điểm xuất viện nhất,OMR / đo lường lâm sàng,Excluded predictor,Integer,mmHg,Không,Loại khỏi model do missing cao,Missing 92.88% trong dataset; không dùng trong model cuối.,92.88
+weight_kg_last,Cân nặng gần thời điểm xuất viện nhất,OMR / đo lường lâm sàng,Excluded predictor,Numeric,kg,Không,Loại khỏi model do missing cao,Missing 61.60% trong dataset; không dùng trong model cuối.,61.60
+egfr_last,eGFR gần thời điểm xuất viện nhất,OMR / đo lường lâm sàng,Excluded predictor,Numeric,mL/min/1.73 m²,Không,Loại khỏi model do missing cao,Missing 100% trong file hiện tại; không dùng trong model cuối.,100.00

@@ -123,6 +123,7 @@ Kết luận đối chiếu: mô hình của nhóm em nằm trong vùng hiệu n
 * Phân tích fairness cho thấy nhóm ≥85 tuổi có Sensitivity thấp hơn (55.43%), cần được lưu ý khi diễn giải kết quả.
 * Câu hỏi cho GV: Ablation study có bắt buộc ở Mốc 3 khi nhóm đã thực hiện so sánh LR/RF/XGBoost/LightGBM, tuning, SHAP, fairness, error analysis và DCA hay không?C. Tự đánh giá dự án theo Phụ lục FAIR, TRIPOD+AI, PROBAST+AI
 
+### C. Tự đánh giá dự án theo Phụ lục FAIR, TRIPOD+AI, PROBAST+AI
 ### C1. FAIR — dữ liệu
 
 Ethics/IRB: MIMIC-IV là cơ sở dữ liệu đã được khử định danh.
